@@ -4,10 +4,10 @@
     <title>Ultimate Study App Updates</title>
     <item>
       <title>Phiên bản 1.0.1</title>
-      <sparkle:releaseNotesLink>https://github.com/unknowmember/ultimate_study_app/releases/tag/v1.0.1</sparkle:releaseNotesLink> //doi v1.0.x thanh phien ban muon nang cap
+      <sparkle:releaseNotesLink>https://github.com/unknowmember/ultimate_study_app/releases/tag/v1.0.1</sparkle:releaseNotesLink>
       <enclosure 
-        url="https://github.com/unknowmember/ultimate_study_app/releases/download/v1.0.1/UltimateStudyApp-Setup-v1.0.1.exe" //doi v1.0.x thanh phien ban muon nang cap
-        sparkle:version="1.0.1" //doi 1.0.x thanh phien ban muon nang cap
+        url="https://github.com/unknowmember/ultimate_study_app/releases/download/v1.0.1/UltimateStudyApp-Setup-v1.0.1.exe" 
+        sparkle:version="1.0.1" 
         length="0" 
         type="application/octet-stream" />
     </item>
