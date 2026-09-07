@@ -7,7 +7,7 @@
       <sparkle:releaseNotesLink>https://github.com/unknowmember/ultimate_study_app/releases/tag/v1.0.1</sparkle:releaseNotesLink> //doi v1.0.x thanh phien ban muon nang cap
       <enclosure 
         url="https://github.com/unknowmember/ultimate_study_app/releases/download/v1.0.1/UltimateStudyApp-Setup-v1.0.1.exe" //doi v1.0.x thanh phien ban muon nang cap
-        sparkle:version="1.0.1+2" //doi 1.0.x thanh phien ban muon nang cap va dung dang sau dau + se la x+1
+        sparkle:version="1.0.1" //doi 1.0.x thanh phien ban muon nang cap
         length="0" 
         type="application/octet-stream" />
     </item>
