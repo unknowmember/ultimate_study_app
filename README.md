@@ -1,21 +1,3 @@
 <<<<<<< HEAD
 # ultimate_study_app
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# ultimate_study_app
->>>>>>> 056f0f6460a8090a305939093f013cab2bc0a840
+I'm just a new developer. This project still has quite a few bugs, but I'll do my best to fix them and make the project really polished. Thanks for downloading and giving it a try!
