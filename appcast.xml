@@ -3,11 +3,11 @@
   <channel>
     <title>Ultimate Study App Updates</title>
     <item>
-      <title>Phiên bản 1.0.1</title>
-      <sparkle:releaseNotesLink>https://github.com/unknowmember/ultimate_study_app/releases/tag/v1.0.1</sparkle:releaseNotesLink>
+      <title>Phiên bản 1.0.2</title>
+      <sparkle:releaseNotesLink>https://github.com/unknowmember/ultimate_study_app/releases/tag/v1.0.2</sparkle:releaseNotesLink>
       <enclosure 
-        url="https://github.com/unknowmember/ultimate_study_app/releases/download/v1.0.1/UltimateStudyApp-Setup-v1.0.1.exe" 
-        sparkle:version="1.0.1" 
+        url="https://github.com/unknowmember/ultimate_study_app/releases/download/v1.0.1/UltimateStudyApp-Setup-v1.0.2.exe" 
+        sparkle:version="1.0.2" 
         length="0" 
         type="application/octet-stream" />
     </item>
