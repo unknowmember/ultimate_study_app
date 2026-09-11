@@ -1,0 +1,160 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:window_manager/window_manager.dart';
+import 'dart:ui';
+import 'firebase_options.dart';
+import 'core/services/auth_service.dart';
+import 'core/module_registry.dart';
+import 'features/auth/login_screen.dart';
+import 'features/focus/widgets/yt_music_mini_player.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Bắt mọi lỗi Flutter UI
+  FlutterError.onError = (details) {
+    FlutterError.dumpErrorToConsole(details);
+    print('=== [FLUTTER ERROR] ===\n${details.exception}\n${details.stack}');
+  };
+
+  // Bắt mọi lỗi Bất đồng bộ (Async/FFI)
+  PlatformDispatcher.instance.onError = (error, stack) {
+    print('=== [ASYNC ERROR] ===\n$error\n$stack');
+    return true;
+  };
+  // Khởi tạo Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // Khởi tạo window_manager cho Windows Desktop
+  await windowManager.ensureInitialized();
+  WindowOptions windowOptions = const WindowOptions(
+    size: Size(1280, 720),
+    center: true,
+    title: 'Ultimate Study App',
+  );
+
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
+
+  runApp(const UltimateStudyApp());
+}
+
+class UltimateStudyApp extends StatelessWidget {
+  const UltimateStudyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Ultimate Study App',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: const Color(0xFF1E1E2E),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.dark,
+        ),
+      ),
+      home: StreamBuilder(
+        stream: AuthService().authStateChanges,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
+          // Đã đăng nhập -> Mở khung ứng dụng chính
+          if (snapshot.hasData) {
+            return const MainLayout();
+          }
+          // Chưa đăng nhập -> Hiện màn hình đăng nhập
+          return const LoginScreen();
+        },
+      ),
+    );
+  }
+}
+
+class MainLayout extends StatefulWidget {
+  const MainLayout({super.key});
+
+  @override
+  State<MainLayout> createState() => _MainLayoutState();
+}
+
+class _MainLayoutState extends State<MainLayout> {
+  int _selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final modules = ModuleRegistry.modules;
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          // 1. LỚP NỀN: Thanh Sidebar điều hướng và Nội dung các Module
+          Row(
+            children: [
+              NavigationRail(
+                selectedIndex: _selectedIndex,
+                onDestinationSelected: (int index) {
+                  setState(() => _selectedIndex = index);
+                },
+                labelType: NavigationRailLabelType.selected,
+                // Nút Đăng xuất đặt ở dưới cùng thanh Sidebar
+                trailing: Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: IconButton(
+                        icon: const Icon(Icons.logout, color: Colors.redAccent),
+                        tooltip: 'Đăng xuất',
+                        onPressed: () async {
+                          await AuthService().signOut();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                destinations: modules.map((m) {
+                  return NavigationRailDestination(
+                    icon: Icon(m.icon),
+                    label: Text(m.title),
+                  );
+                }).toList(),
+              ),
+              const VerticalDivider(thickness: 1, width: 1),
+              
+              // Sử dụng IndexedStack để giữ nguyên trạng thái các Module khi chuyển tab
+              Expanded(
+                child: modules.isNotEmpty
+                    ? IndexedStack(
+                        index: _selectedIndex,
+                        children: modules.map((m) {
+                          return m.buildView(
+                            context,
+                            onNavigate: (index) {
+                              setState(() => _selectedIndex = index);
+                            },
+                          );
+                        }).toList(),
+                      )
+                    : const Center(child: Text('Chưa có module nào')),
+              ),
+            ],
+          ),
+
+          // 2. LỚP NỔI: YouTube Music Mini Player đặt cố định góc dưới bên phải
+          const Positioned(
+            right: 24,
+            bottom: 24,
+            child: YtMusicMiniPlayer(),
+          ),
+        ],
+      ),
+    );
+  }
+}

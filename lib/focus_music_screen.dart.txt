@@ -1,0 +1,64 @@
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:webview_windows/webview_windows.dart';
+import 'path_provider_platform_interface'; // hoặc tự trỏ đường dẫn Local AppData
+
+class FocusMusicScreen extends StatefulWidget {
+  const FocusMusicScreen({super.key});
+
+  @override
+  State<FocusMusicScreen> createState() => _FocusMusicScreenState();
+}
+
+class _FocusMusicScreenState extends State<FocusMusicScreen> {
+  final _controller = WebviewController();
+  bool _isInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initWebview();
+  }
+
+  Future<void> _initWebview() async {
+    try {
+      // Khởi tạo WebView2 Controller trên Windows
+      await _controller.initialize();
+      
+      // Tải trang YouTube Music
+      await _controller.loadUrl('https://music.youtube.com');
+      
+      // Cho phép phát âm thanh nền khi chuyển tab hoặc minimized
+      await _controller.setPopupWindowPolicy(WebviewPopupWindowPolicy.deny);
+
+      if (mounted) {
+        setState(() {
+          _isInitialized = true;
+        });
+      }
+    } catch (e) {
+      debugPrint('Lỗi khởi tạo WebView: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Nhạc Tập Trung (YouTube Music)'),
+        backgroundColor: const Color(0xFF121212),
+      ),
+      body: _isInitialized
+          ? Webview(_controller)
+          : const Center(
+              child: CircularProgressIndicator(color: Colors.redAccent),
+            ),
+    );
+  }
+}
